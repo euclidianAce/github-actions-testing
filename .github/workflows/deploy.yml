@@ -24,9 +24,9 @@ jobs:
 
       - name: Build Site
         run: |
-          luarocks install lexical-path
+          luarocks install --dev cyan
           mkdir site
-          lua build-stuff.lua
+          cyan build-stuff.lua
 
       - name: Upload pages
         id: deployment
