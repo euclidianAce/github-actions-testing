@@ -7,8 +7,6 @@ on:
 
 permissions:
   contents: read
-  id-token: write # for verifying the deployment source
-  pages: write # to be able deploy to GitHub Pages
 
 jobs:
   build:
@@ -38,6 +36,10 @@ jobs:
     environment:
       name: github-pages
       url: ${{steps.deployment.outputs.page_url}}
+
+    permissions:
+      id-token: write # for verifying the deployment source
+      pages: write # to be able deploy to GitHub Pages
 
     steps:
       - name: Deploy
