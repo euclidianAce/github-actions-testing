@@ -1,0 +1,45 @@
+name: Deploy Site
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  id-token: write # for verifying the deployment source
+  pages: write # to be able deploy to GitHub Pages
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+
+      - name: Install Lua
+        uses: hishamhm/gh-actions-lua@master
+
+      - name: Build Site
+        run: |
+          mkdir site
+          lua build-stuff.lua
+
+      - name: Upload pages
+        id: deployment
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{steps.deployment.outputs.page_url}}
+
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
